@@ -7,7 +7,7 @@ interface SubmitButtonProps {
 export function SubmitButton({ text } : SubmitButtonProps) {
     return (
         <>
-            <Button className="w-full font-bold text-md bg-blue-600" size="lg">
+            <Button className="w-full font-bold text-md bg-gradient-to-r from-blue-500 to-teal-500" size="lg">
                 {text}
             </Button>
         </>
