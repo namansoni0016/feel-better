@@ -6,6 +6,7 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Eye, EyeOff } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
+import { signInWithGoogle } from "@/app/actions/authActions";
 
 export function LoginForm() {
     const [showPassword, setShowPassword] = useState<Boolean>(false); 
@@ -29,9 +30,11 @@ export function LoginForm() {
                 </div>
             </div>
             <div className="flex flex-col space-y-2">
-                <Button variant="outline" className="w-full" size="lg">
-                    <FcGoogle className="size-5" /> Continue with Google
-                </Button>
+                <form action={signInWithGoogle}>
+                    <Button variant="outline" className="w-full" size="lg">
+                        <FcGoogle className="size-5" /> Continue with Google
+                    </Button>
+                </form>
             </div>
         </>
     );
