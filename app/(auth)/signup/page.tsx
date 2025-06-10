@@ -1,5 +1,4 @@
 import { SignupForm } from "@/components/SignupForm";
-import { SubmitButton } from "@/components/SubmitButton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
@@ -21,7 +20,6 @@ export default function SignupPage() {
                     </CardHeader>
                     <CardContent className="flex flex-col space-y-4">
                         <SignupForm />
-                        <SubmitButton text="Sign Up" />
                         <Button variant="link" className="w-full space-y-0 text-sm font-semibold text-gray-700" asChild>
                             <Link href="/login">Already have an account?</Link>
                         </Button>
