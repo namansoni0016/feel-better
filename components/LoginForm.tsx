@@ -93,7 +93,7 @@ export function LoginForm() {
                             <FormControl>
                                 <div className="flex flex-row relative">
                                     <Input type={showPassword ? "text" : "password"} placeholder="******" {...field}/>
-                                    <Button variant="outline" className="absolute inset-y-0 right-0 pr-3 flex items-center rounded-l-none" onClick={() => setShowPassword(!showPassword)}>
+                                    <Button variant="outline" type="button" className="absolute inset-y-0 right-0 pr-3 flex items-center rounded-l-none" onClick={() => setShowPassword(!showPassword)}>
                                         {showPassword ? (<Eye />) : (<EyeOff />)}
                                     </Button>
                                 </div>

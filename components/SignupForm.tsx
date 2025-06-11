@@ -3,17 +3,17 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { Label } from "./ui/label";
 import { Eye, EyeOff } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { signInWithGoogle, signUpWithCredentials } from "@/actions/authActions";
 import { SubmitButton } from "./SubmitButton";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { signUpSchema } from "@/lib/zodSchemas";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 import { z } from "zod";
+import toast from "react-hot-toast";
 
 type SignupFormValues = z.infer<typeof signUpSchema>;
 
@@ -46,6 +46,7 @@ export function SignupForm() {
             const result: SignupResponse = await signUpWithCredentials(formData);
             if(result?.success) {
                 router.push("/login");
+                toast.success('Account created successfully! Please login to continue.');
             } else if(result) {
                 form.clearErrors();
                 if(result.fieldErrors) {
@@ -117,7 +118,7 @@ export function SignupForm() {
                             <FormControl>
                                 <div className="flex flex-row relative">
                                     <Input type={showPassword ? "text" : "password"} placeholder="******" {...field}/>
-                                    <Button variant="outline" className="absolute inset-y-0 right-0 pr-3 flex items-center rounded-l-none" onClick={() => setShowPassword(!showPassword)}>
+                                    <Button variant="outline" type="button" className="absolute inset-y-0 right-0 pr-3 flex items-center rounded-l-none" onClick={() => setShowPassword(!showPassword)}>
                                         {showPassword ? (<Eye />) : (<EyeOff />)}
                                     </Button>
                                 </div>
