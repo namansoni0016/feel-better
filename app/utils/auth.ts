@@ -18,21 +18,26 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             password: { label: "Password", type: "password" },
         },
         authorize: async (credentials) => {
-            const validatedCredentials = loginSchema.parse(credentials);
-            const user = await prisma.user.findUnique({
-                where: { email: validatedCredentials.email },
-            });
-            if(!user) {
-                throw new Error("Invalid credentials!");
+            try {
+                const validatedCredentials = loginSchema.parse(credentials);
+                const user = await prisma.user.findUnique({
+                    where: { email: validatedCredentials.email },
+                });
+                if(!user) {
+                    return null;
+                }
+                if(!user.password) {
+                    throw new Error("User registered with different method!");
+                }
+                const isValid = await bcrypt.compare(validatedCredentials.password, user.password);
+                if(!isValid) {
+                    return null;
+                }
+                return user;
+            } catch (error) {
+                console.error(error);
+                return null;
             }
-            if(!user.password) {
-                throw new Error("User registered with different method!");
-            }
-            const isValid = await bcrypt.compare(validatedCredentials.password, user.password);
-            if(!isValid) {
-                throw new Error("Invalid Credentials");
-            }
-            return user;
         },
     }),],
     callbacks: {

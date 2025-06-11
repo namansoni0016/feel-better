@@ -1,10 +1,16 @@
+import { auth } from "@/app/utils/auth";
 import { SignupForm } from "@/components/SignupForm";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { PiHeartbeatFill } from "react-icons/pi";
 
-export default function SignupPage() {
+export default async function SignupPage() {
+    const session = await auth();
+    if(session?.user) {
+        redirect("/");
+    }
     return (
         <>
             <div className="flex h-screen w-full items-center justify-center">

@@ -4,45 +4,72 @@ import { signIn } from "@/app/utils/auth";
 import bcrypt from "bcrypt";
 import prisma from "@/lib/prisma";
 import { signUpSchema } from "@/lib/zodSchemas";
+import { AuthError } from "next-auth";
 
 export async function signInWithGoogle() {
     await signIn("google", { redirectTo: "/" });
 }
 
 export async function signUpWithCredentials(formData: FormData) {
-    const name = formData.get("name");
-    const email = formData.get("email");
-    const password = formData.get("password");
+    try {
+        const name = formData.get("name")?.toString();
+        const email = formData.get("email")?.toString();
+        const password = formData.get("password")?.toString();
 
-    const validatedData = signUpSchema.parse({name, email, password}); 
-
-    const existingUser = await prisma.user.findUnique({
-        where: { email: validatedData.email },
-    });
-    if(existingUser) throw new Error("User already exists!");
-
-    const hashedPassword = await bcrypt.hash(validatedData.password, 10);
-
-    const user = await prisma.user.create({
-        data: {
-            name: validatedData.name,
-            email: validatedData.email,
-            password: hashedPassword,
+        const validatedData = signUpSchema.safeParse({name, email, password}); 
+        if(!validatedData.success) {
+            return { success: false, error: "Validation Failed!", fieldErrors: validatedData.error.flatten().fieldErrors }
         }
-    });
-    return user;
+
+        const existingUser = await prisma.user.findUnique({
+            where: { email: validatedData.data.email },
+        });
+        if(existingUser) {
+            return { success: false, error: "User with this email already exists!", field: "email" };
+        }
+
+        const hashedPassword = await bcrypt.hash(validatedData.data.password, 10);
+
+        const user = await prisma.user.create({
+            data: {
+                name: validatedData.data.name,
+                email: validatedData.data.email,
+                password: hashedPassword,
+            }
+        });
+        return { success: true };
+    } catch (error) {
+        console.error("Signup error: ", error);
+        if(error instanceof AuthError) {
+            return { success: false, error: error.message, field: null };
+        }
+        return { success: false, error: "Something went wrong during signup!", field: null };
+    }
 }
 
 export async function signInWithCredentials(formData: FormData) {
-    const email = formData.get("email")?.toString();
-    const password = formData.get("password")?.toString();
-    const result = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-    });
-    if(result?.error) {
-        throw new Error(result.error);
+    try {
+        const email = formData.get("email")?.toString();
+        const password = formData.get("password")?.toString();
+        const result = await signIn("credentials", {
+            email,
+            password,
+            redirect: false,
+        });
+        if(result?.error) {
+            if(result.error.includes("CallbackRouteError")) {
+                return { success: false, error: "Invalid email or password!", field: null };
+            }
+            return { success: false, error: result.error, field: null }
+        }
+        return { success: true };
+    } catch (error) {
+        console.error(error);
+        if(error instanceof AuthError) {
+            if(error.type === "CredentialsSignin") {
+                return { success: false, error: "Invalid email or password!" };
+            }
+        }
+        return { success: false, error: "Something went wrong. Please try again!", field: null };
     }
-    return { success: true };
 }
