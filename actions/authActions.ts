@@ -1,10 +1,11 @@
 "use server";
 
-import { signIn } from "@/app/utils/auth";
+import { auth, signIn } from "@/app/utils/auth";
 import bcrypt from "bcrypt";
 import prisma from "@/lib/prisma";
 import { signUpSchema } from "@/lib/zodSchemas";
 import { AuthError } from "next-auth";
+import { revalidatePath } from "next/cache";
 
 export async function signInWithGoogle() {
     await signIn("google", { redirectTo: "/" });
@@ -71,5 +72,25 @@ export async function signInWithCredentials(formData: FormData) {
             }
         }
         return { success: false, error: "Something went wrong. Please try again!", field: null };
+    }
+}
+
+export async function updateProfile(data: {name: string}) {
+    const session = await auth();
+    if(!session?.user?.id) {
+        throw new Error("Unauthorized!");
+    }
+    try {
+        await prisma.user.update({
+            where: { id: session.user.id },
+            data: {
+                name: data.name,
+            },
+        });
+        revalidatePath("/profile");
+        return { success: true };
+    } catch (error) {
+        console.error("Update failed: ", error);
+        throw new Error("Failed to updated profile!");
     }
 }

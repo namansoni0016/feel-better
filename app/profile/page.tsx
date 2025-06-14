@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { auth } from "../utils/auth";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { EditProfileModal } from "@/components/EditProfileModal";
 
@@ -22,6 +22,7 @@ export default async function ProfilePage() {
                             </AvatarFallback>
                         </Avatar>
                         <CardTitle className="mt-4 text-3xl font-bold text-gray-700">{session.user.name}</CardTitle>
+                        <CardDescription className="text-muted-foreground text-md">{session.user.email}</CardDescription>
                     </div>
                 </CardHeader>
                 <CardContent>

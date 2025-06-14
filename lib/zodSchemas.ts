@@ -13,7 +13,6 @@ const signUpSchema = z.object({
 
 const profileSchema = z.object({
     name: z.string().min(1, { message: "Name is required!" }),
-    email: z.string().email({ message: "Please enter a valied email!" }),
 })
 
 export { loginSchema, signUpSchema, profileSchema };
