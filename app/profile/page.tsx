@@ -2,8 +2,7 @@ import { redirect } from "next/navigation";
 import { auth } from "../utils/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Pencil } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { EditProfileModal } from "@/components/EditProfileModal";
 
 export default async function ProfilePage() {
     const session = await auth();
@@ -22,18 +21,15 @@ export default async function ProfilePage() {
                                 {session.user.name?.charAt(0).toUpperCase()}
                             </AvatarFallback>
                         </Avatar>
-                        <CardTitle className="mt-4 text-3xl font-bold">{session.user.name}</CardTitle>
+                        <CardTitle className="mt-4 text-3xl font-bold text-gray-700">{session.user.name}</CardTitle>
                     </div>
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-4">
                         <div className="flex justify-between items-center">
                             <h3 className="text-xl font-semibold">Edit Profile</h3>
-                            <Button variant="outline" size="sm" className="gap-2">
-                                <Pencil className="size-4" />
-                            </Button>
+                            <EditProfileModal user={session.user} />
                         </div>
-
                     </div>
                 </CardContent>
             </Card>
