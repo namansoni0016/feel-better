@@ -16,7 +16,7 @@ export default async function ProfilePage() {
                     <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-teal-400 rounded-t-xl h-32 -z-10" />
                     <div className="flex flex-col items-center pt-16">
                         <Avatar className="size-28 border-4 border-white shadow-lg">
-                            <AvatarImage src={session.user.image || "avatar.png"} className="object-cover" />
+                            <AvatarImage src={session.user.image || "/avatar.png"} className="object-cover" />
                             <AvatarFallback className="bg-blue-100 text-blue-600 text-2xl font-bold">
                                 {session.user.name?.charAt(0).toUpperCase()}
                             </AvatarFallback>
