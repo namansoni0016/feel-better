@@ -4,7 +4,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { auth } from "@/app/utils/auth";
-import { LogOut, User } from "lucide-react";
+import { User } from "lucide-react";
 import { SignOut } from "./SignOut";
 
 export async function Navbar() {

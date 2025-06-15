@@ -9,6 +9,11 @@ const signUpSchema = z.object({
     name: z.string().min(1, { message: "Name is required!" }),
     email: z.string().email({ message: "Email is required!" }),
     password: z.string().min(6, { message: "Password should be 6 characters long!" }),
+});
+
+const profileSchema = z.object({
+    name: z.string().min(1, { message: "Name is required!" }),
+    image: z.string().url().optional(),
 })
 
-export { loginSchema, signUpSchema };
+export { loginSchema, signUpSchema, profileSchema };

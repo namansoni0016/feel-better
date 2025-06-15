@@ -1,10 +1,11 @@
 "use server";
 
-import { signIn } from "@/app/utils/auth";
+import { auth, signIn } from "@/app/utils/auth";
 import bcrypt from "bcrypt";
 import prisma from "@/lib/prisma";
-import { signUpSchema } from "@/lib/zodSchemas";
+import { profileSchema, signUpSchema } from "@/lib/zodSchemas";
 import { AuthError } from "next-auth";
+import { revalidatePath } from "next/cache";
 
 export async function signInWithGoogle() {
     await signIn("google", { redirectTo: "/" });
@@ -15,21 +16,17 @@ export async function signUpWithCredentials(formData: FormData) {
         const name = formData.get("name")?.toString();
         const email = formData.get("email")?.toString();
         const password = formData.get("password")?.toString();
-
         const validatedData = signUpSchema.safeParse({name, email, password}); 
         if(!validatedData.success) {
             return { success: false, error: "Validation Failed!", fieldErrors: validatedData.error.flatten().fieldErrors }
         }
-
         const existingUser = await prisma.user.findUnique({
             where: { email: validatedData.data.email },
         });
         if(existingUser) {
             return { success: false, error: "User with this email already exists!", field: "email" };
         }
-
         const hashedPassword = await bcrypt.hash(validatedData.data.password, 10);
-
         const user = await prisma.user.create({
             data: {
                 name: validatedData.data.name,
@@ -71,5 +68,27 @@ export async function signInWithCredentials(formData: FormData) {
             }
         }
         return { success: false, error: "Something went wrong. Please try again!", field: null };
+    }
+}
+
+export async function updateProfile(data: unknown) {
+    const session = await auth();
+    if(!session?.user?.id) {
+        throw new Error("Unauthorized!");
+    }
+    try {
+        const validatedData = profileSchema.parse(data);
+        const updatedUser = await prisma.user.update({
+            where: { id: session.user.id },
+            data: {
+                name: validatedData.name,
+                image: validatedData.image,
+            },
+        });
+        revalidatePath("/profile");
+        return { success: true, user: updatedUser };
+    } catch (error) {
+        console.error("Update failed: ", error);
+        throw new Error("Failed to updated profile!");
     }
 }
