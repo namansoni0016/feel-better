@@ -6,7 +6,7 @@ import Link from "next/link";
 export default function HomePage() {
     return (
         <div className="flex flex-col h-[calc(100vh-64px)] w-full items-center justify-center">
-            <Card className="w-full max-w-md shadow-md rounded-2xl py-1">
+            <Card className="w-full max-w-md shadow-md rounded-2xl py-1 hover:animate-bounce">
                 <CardHeader>
                     <CardTitle className="flex flex-row items-center justify-center text-6xl font-bold text-gray-700">
                         <div className="bg-gradient-to-r from-blue-500 to-teal-500 bg-clip-text text-transparent">FeelBetter</div>
