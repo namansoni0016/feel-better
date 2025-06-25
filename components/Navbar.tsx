@@ -12,7 +12,7 @@ export async function Navbar() {
         return null;
     }
     return (
-        <nav className="border-b border-black px-6 py-3 sticky top-0 z-50">
+        <nav className="border-b border-blue-950 px-6 py-3 sticky top-0 z-50">
             <div className="mx-auto flex items-center justify-between">
                 <div className="bg-white max-w-fit px-2 rounded-full flex flex-row">
                     <Link href="/" className="text-3xl font-bold bg-gradient-to-r from-blue-500 to-teal-500 bg-clip-text text-transparent">FB</Link>

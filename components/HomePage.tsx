@@ -14,7 +14,7 @@ export default function HomePage() {
                     </CardTitle>
                 </CardHeader>
             </Card>
-            <span className="italic mt-4 text-lg text-blue-900 font-semibold">Your safe space for mental wellness. Track your mood, journal your thoughts, and find peace</span>
+            <span className="italic mt-4 text-lg text-blue-900 font-semibold">Your safe space for mental wellness. Track your mood, journal your thoughts, and find peace.</span>
             <Button variant="link" className="text-blue-900 font-semibold text-md" asChild>
                 <Link href="/signup">Click Here & Get Started...</Link>
             </Button>

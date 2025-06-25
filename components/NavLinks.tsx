@@ -14,22 +14,22 @@ export function NavLinks() {
         {
             name: 'Dashboard',
             href: '/dashboard',
-            icon: <IoHome className="size-5 font-semibold" />
+            icon: <IoHome className="size-5 text-blue-950 font-semibold" />
         },
         {
             name: 'New Journal Entry',
             href: '/journal/new',
-            icon: <MdEditDocument className="size-5 font-semibold" />
+            icon: <MdEditDocument className="size-5 text-blue-950 font-semibold" />
         },
         {
             name: 'Journal Entries',
             href: '/journal/entries',
-            icon: <FaBook className="size-5 font-semibold" />
+            icon: <FaBook className="size-5 text-blue-950 font-semibold" />
         },
         {
             name: 'Mood Tracker',
             href: '/mood-tracker',
-            icon: <PiHeartbeatFill className="size-5 font-semibold" />
+            icon: <PiHeartbeatFill className="size-5 text-blue-950 font-semibold" />
         }
     ]
     return (
@@ -38,7 +38,7 @@ export function NavLinks() {
                 <div className="mb-4" key={link.href}>
                     <Link href={link.href}>
                         <Button variant={pathname === link.href ? 'secondary' : 'ghost'}
-                        className="w-full justify-start text-md font-semibold rounded-full">
+                        className="w-full justify-start text-md font-semibold rounded-full text-blue-950">
                             {link.icon}
                             <span className="ml-3">{link.name}</span>
                         </Button>
