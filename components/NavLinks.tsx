@@ -18,7 +18,7 @@ export function NavLinks() {
         },
         {
             name: 'New Journal Entry',
-            href: '/journal/new',
+            href: ['/journal/new', '/journal/new/create'],
             icon: <MdEditDocument className="size-5 text-blue-950 font-semibold" />
         },
         {
@@ -34,17 +34,21 @@ export function NavLinks() {
     ]
     return (
         <nav>
-            {navLinks.map((link) => (
-                <div className="mb-4" key={link.href}>
-                    <Link href={link.href}>
-                        <Button variant={pathname === link.href ? 'secondary' : 'ghost'}
-                        className="w-full justify-start text-md font-semibold rounded-full text-blue-950">
-                            {link.icon}
-                            <span className="ml-3">{link.name}</span>
-                        </Button>
-                    </Link>
-                </div>
-            ))}
+            {navLinks.map((link) => {
+                const isActive = Array.isArray(link.href) ? link.href.some(path => pathname.startsWith(path)) : pathname.startsWith(link.href);
+                const href = Array.isArray(link.href) ? link.href[0] : link.href;
+                return (
+                    <div className="mb-4" key={Array.isArray(link.href) ? link.href.join(',') : link.href}>
+                        <Link href={href}>
+                            <Button variant={isActive ? 'secondary' : 'ghost'}
+                            className="w-full justify-start text-md font-semibold rounded-full text-blue-950">
+                                {link.icon}
+                                <span className="ml-3">{link.name}</span>
+                            </Button>
+                        </Link>
+                    </div>
+                )
+            })}
         </nav>
     )
 }
