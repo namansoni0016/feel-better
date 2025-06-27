@@ -8,8 +8,10 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { FaEraser, FaUnderline, FaBold, FaItalic, FaStrikethrough } from "react-icons/fa";
 import { IoIosSave } from "react-icons/io";
+import { createJournalEntry } from "@/actions/journalActions";
+import toast from "react-hot-toast";
 
-export function JournalEditor({ initialContent = '', onSave }: { initialContent?: string, onSave: (content: string) => void }) {
+export function JournalEditor({ initialContent = '' }: { initialContent?: string }) {
     const [isSaving, setIsSaving] = useState<boolean>(false);
     const [isClearing, setIsClearing] = useState<boolean>(false);
     const editor = useEditor({
@@ -22,7 +24,25 @@ export function JournalEditor({ initialContent = '', onSave }: { initialContent?
         ],
         content: initialContent,
     });
-    const handleSave = async () => {};
+    const handleSave = async () => {
+        if(!editor) return;
+        setIsSaving(true);
+        try {
+            const content = editor.getHTML();
+            const result = await createJournalEntry(content);
+            if(result.success) {
+                toast.success(result.message);
+            } else {
+                toast.error(result.message);
+            }
+        } catch (error) {
+            console.error("Failed to save journal: ", error);
+            toast.error("An unexpected error occured. Please try again!");
+        } finally {
+            editor.commands.clearContent();
+            setIsSaving(false);
+        }
+    };
     const handleClear = async () => {
         if(!editor) return;
         setIsClearing(true);

@@ -8,11 +8,10 @@ export default function CreateJournal() {
     if(!session?.user) {
         redirect("/login"); 
     }
-    const handleSave = async() => {}
     return (
         <div className="container mx-auto p-4 max-w-4xl">
             <h1 className="text-center text-3xl font-bold mb-6">New Journal Entry</h1>
-            <JournalEditor onSave={handleSave} />
+            <JournalEditor />
         </div>
     );
 }
