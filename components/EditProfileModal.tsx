@@ -20,24 +20,24 @@ import { UploadButton } from "@/lib/uploadthing";
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
-export function EditProfileModal({ user }: { user: User}) {
+export function EditProfileModal({ user }: { user: User | undefined}) {
     const [isOpen, setIsOpen] = useState<boolean>(false);
-    const [tempImage, setTempImage] = useState<string>(user.image || "");
+    const [tempImage, setTempImage] = useState<string>(user?.image || "");
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const form = useForm<ProfileFormValues>({
         resolver: zodResolver(profileSchema),
         defaultValues: {
-            name: user.name || "",
-            image: user.image || "",
+            name: user?.name || "",
+            image: user?.image || "",
         }
     });
     useEffect(() => {
         if(isOpen) {
             form.reset({
-                name: user.name || "",
-                image: user.image || "",
+                name: user?.name || "",
+                image: user?.image || "",
             });
-            setTempImage(user.image || "");
+            setTempImage(user?.image || "");
         }
     }, [isOpen, form, user]);
     const handleImageUpload = (url: string) => {
@@ -75,7 +75,7 @@ export function EditProfileModal({ user }: { user: User}) {
                                 <Avatar className="size-24 border-4 border-white shadow-lg">
                                     <AvatarImage src={tempImage || "/avatar.png"} className="object-cover" />
                                     <AvatarFallback className="bg-blue-100 text-blue-600 text-2xl font-bold">
-                                        {user.name?.charAt(0).toUpperCase()}
+                                        {user?.name?.charAt(0).toUpperCase()}
                                     </AvatarFallback>
                                 </Avatar>
                                 <UploadButton endpoint="imageUploader" onClientUploadComplete={(res) => {

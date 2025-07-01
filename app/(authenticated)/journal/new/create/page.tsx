@@ -1,13 +1,7 @@
 'use client';
 import { JournalEditor } from "@/components/JournalEditor";
-import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
 
 export default function CreateJournal() {
-    const { data: session } = useSession();
-    if(!session?.user) {
-        redirect("/login"); 
-    }
     return (
         <div className="container mx-auto p-4 max-w-4xl">
             <h1 className="text-center text-3xl font-bold mb-6">New Journal Entry</h1>

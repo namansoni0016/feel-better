@@ -1,18 +1,12 @@
 "use client";
 
 import { deleteJournalEntry, getJournalEntries } from "@/actions/journalActions";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FaTrash } from "react-icons/fa";
 
 export default function JournalEntries() {
-    const { data: session } = useSession();
-    if(!session?.user) {
-        redirect("/login");
-    }
     const [entries, setEntries] = useState<Awaited<ReturnType<typeof getJournalEntries>>>([]);
     const [isDeleting, setIsDeleting] = useState<string | null>(null);
     useEffect(() => {
