@@ -89,3 +89,26 @@ export async function deleteJournalEntry(entryId: string) {
         return { success: false, message: "Failed to delete journal entry!" };
     }
 }
+
+export async function getJournalEntry(entryId: string) {
+    const session = await auth();
+    if(!session?.user?.id) {
+        throw new Error("Unauthorized!");
+    }
+    try {
+        const entry = await prisma.journalEntry.findUnique({
+            where: { id: entryId },
+        });
+        if(!entry || entry.userId !== session.user.id) {
+            return null;
+        }
+        return {
+            ...entry,
+            formattedDate: format(entry.createdAt, "dd MMMM yyyy"),
+            formattedTime: format(entry.createdAt, "h:mm a"),
+        };
+    } catch (error) {
+        console.error("Error fetching entry: ", error);
+        throw new Error("Failed to fetch journal entry!");
+    }
+}
